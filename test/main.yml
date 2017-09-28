@@ -1,0 +1,88 @@
+---
+# Tasks for tesing role
+
+- name: run idempotence test
+  hosts: localhost
+  roles:
+    - role: docker_presets
+    - role: docker_sandbox
+      docker_sandbox_state: started
+
+- name: test epel repository install
+  hosts: docker_sandbox_containers
+  roles:
+    - epel_repository
+
+  vars:
+    epel_repository_state: present
+
+    epel_repository_enabled: 1
+    epel_repository_debuginfo_enabled: 1
+    epel_repository_source_enabled: 1
+
+    epel_repository_testing_enabled: 1
+    epel_repository_testing_debuginfo_enabled: 1
+    epel_repository_testing_source_enabled: 1
+
+  tasks:
+    - name: check epel repository config file
+      stat:
+        path: "{{ epel_repository_config_file }}"
+      register: check_epel_config_file_result
+
+    - name: check epel testing repository config file
+      stat:
+        path: "{{ epel_repository_testing_config_file }}"
+      register: check_epel_testing_config_file_result
+
+    - name: check epel config files exist
+      assert:
+        that:
+          - check_epel_config_file_result.stat.exists
+          - check_epel_testing_config_file_result.stat.exists
+
+    - name: check that all enabled options are active for epel repositories
+      command: >-
+        grep 'enabled=0'
+        {{ epel_repository_config_file }}
+        {{ epel_repository_testing_config_file }}
+      register: check_enabled_options
+      failed_when: >-
+        check_enabled_options.rc != 1
+        or check_enabled_options.stdout | length > 0
+      changed_when: false
+
+  tags:
+    - idempotence
+
+- name: test epel repository removal
+  hosts: docker_sandbox_containers
+  roles:
+    - epel_repository
+
+  vars:
+    epel_repository_state: absent
+
+  tasks:
+
+  - name: check epel repository config file
+    stat:
+      path: "{{ epel_repository_config_file }}"
+    register: check_epel_config_file_result
+
+  - name: check epel testing repository config file
+    stat:
+      path: "{{ epel_repository_testing_config_file }}"
+    register: check_epel_testing_config_file_result
+
+  - name: check epel config files exist
+    assert:
+      that:
+        - not check_epel_config_file_result.stat.exists
+        - not check_epel_testing_config_file_result.stat.exists
+
+- name: cleanup docker docker sandbox
+  hosts: localhost
+  roles:
+    - role: docker_sandbox
+      docker_sandbox_state: absent

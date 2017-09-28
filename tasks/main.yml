@@ -1,0 +1,16 @@
+---
+# Role tasks
+
+- name: install epel repository
+  include: install.yml
+  static: false
+  tags:
+    - role::epel_repository
+    - role::epel_repository::install
+
+- name: configure epel repository
+  include: configure.yml
+  static: false
+  tags:
+    - role::epel_repository
+    - role::epel_repository::configure
