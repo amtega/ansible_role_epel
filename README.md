@@ -4,7 +4,7 @@ This is an [Ansible](http://www.ansible.com) role which manages EPEL repository.
 
 ## Requirements
 
-- Ansible >= 2.3.2
+- Ansible >= 2.4
 
 ## Role Variables
 
