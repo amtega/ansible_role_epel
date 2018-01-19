@@ -5,7 +5,7 @@
   package:
     name: >-
       {{ (epel_repository_state == 'present')
-            | ternary(epel_repository_url, 'epel-release') }}
+         | ternary(epel_repository_url, 'epel-release') }}
     state: "{{ epel_repository_state }}"
   tags:
     - role::epel_repository
