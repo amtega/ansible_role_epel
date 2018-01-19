@@ -4,14 +4,14 @@
 - name: run idempotence test
   hosts: localhost
   roles:
-    - role: docker_presets
-    - role: docker_sandbox
+    - role: amtega.docker_presets
+    - role: amtega.docker_sandbox
       docker_sandbox_state: started
 
 - name: test epel repository install
   hosts: docker_sandbox_containers
   roles:
-    - epel_repository
+    - amtega.epel_repository
 
   vars:
     epel_repository_state: present
@@ -58,7 +58,7 @@
 - name: test epel repository removal
   hosts: docker_sandbox_containers
   roles:
-    - epel_repository
+    - amtega.epel_repository
 
   vars:
     epel_repository_state: absent
@@ -84,5 +84,5 @@
 - name: cleanup docker docker sandbox
   hosts: localhost
   roles:
-    - role: docker_sandbox
+    - role: amtega.docker_sandbox
       docker_sandbox_state: absent
