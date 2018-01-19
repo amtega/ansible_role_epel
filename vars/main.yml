@@ -4,7 +4,7 @@
 # Repository package url
 
 epel_repository_url: >-
-  {{ "https://dl.fedoraproject.org/pub/epel/epel-release-latest-"
+  {{ "http://dl.fedoraproject.org/pub/epel/epel-release-latest-"
       + ansible_distribution_major_version
       + ".noarch.rpm" }}
 
