@@ -23,7 +23,7 @@ This is an example playbook:
 
 - hosts: all
   roles:
-    - epel_repository
+    - amtega.epel_repository
 
   vars:
     epel_repository_state: present
@@ -42,14 +42,14 @@ This is an example playbook:
 Test are based on docker containers. You can run the tests with the following commands:
 
 ```shell
-$ cd epel_repository/test
+$ cd amtega.epel_repository/test
 $ ansible-playbook main.yml
 ```
 
 If you have docker engine configured you can avoid running dependant 'docker_engine' role (that usually requries root privileges) with the following commands:
 
 ```shell
-$ cd epel_repository/test
+$ cd amtega.epel_repository/test
 $ ansible-playbook --skip-tags "role::docker_engine" main.yml
 ```
 
