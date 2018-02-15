@@ -3,12 +3,12 @@
 
 # Repository package url
 
-epel_repository_url: >-
+epel_url: >-
   {{ "http://dl.fedoraproject.org/pub/epel/epel-release-latest-"
      + ansible_distribution_major_version
      + ".noarch.rpm" }}
 
 # Repository config files
 
-epel_repository_config_file: /etc/yum.repos.d/epel.repo
-epel_repository_testing_config_file: /etc/yum.repos.d/epel-testing.repo
+epel_config_file: /etc/yum.repos.d/epel.repo
+epel_testing_config_file: /etc/yum.repos.d/epel-testing.repo

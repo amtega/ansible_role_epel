@@ -3,14 +3,14 @@
 
 # Repository state (present /absent)
 
-epel_repository_state: present
+epel_state: present
 
 # Enable or disable EPEL repositories
 
-epel_repository_enabled: 1
-epel_repository_debuginfo_enabled: 0
-epel_repository_source_enabled: 0
+epel_enabled: 1
+epel_debuginfo_enabled: 0
+epel_source_enabled: 0
 
-epel_repository_testing_enabled: 0
-epel_repository_testing_debuginfo_enabled: 0
-epel_repository_testing_source_enabled: 0
+epel_testing_enabled: 0
+epel_testing_debuginfo_enabled: 0
+epel_testing_source_enabled: 0
