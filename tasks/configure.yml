@@ -8,7 +8,7 @@
     option: "enabled"
     value: "{{ item.enabled }}"
     no_extra_spaces: true
-  with_items:
+  loop:
     - section: "epel"
       enabled: "{{ epel_enabled }}"
       path: "{{ epel_config_file }}"
