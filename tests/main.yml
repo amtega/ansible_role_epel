@@ -1,13 +1,14 @@
 ---
 # Tasks for testing role
 
-- name: load docker presets
+- name: run idempotence test
   hosts: localhost
   roles:
     - role: amtega.docker_presets
-    - role: amtega.docker_sandbox
       docker_presets_images_json_query: >-
         [? starts_with(name, `centos`)]
+
+    - role: amtega.docker_sandbox
       docker_sandbox_state: started
   tags:
     - sandbox
@@ -74,6 +75,48 @@
     - name: check that all epel repositories are disabled
       command: >-
         grep 'enabled=1'
+        {{ epel_config_file }}
+        {{ epel_testing_config_file }}
+      register: check_enabled_options
+      failed_when: >-
+        check_enabled_options.rc != 1
+        or check_enabled_options.stdout | length > 0
+      changed_when: false
+
+- name: test epel repository force install and enable
+  hosts: docker_sandbox_containers
+  roles:
+    - amtega.epel
+  vars:
+    epel_state: force
+
+    epel_enabled: 1
+    epel_debuginfo_enabled: 1
+    epel_source_enabled: 1
+
+    epel_testing_enabled: 1
+    epel_testing_debuginfo_enabled: 1
+    epel_testing_source_enabled: 1
+  tasks:
+    - name: check epel repository config file
+      stat:
+        path: "{{ epel_config_file }}"
+      register: check_epel_config_file_result
+
+    - name: check epel testing repository config file
+      stat:
+        path: "{{ epel_testing_config_file }}"
+      register: check_epel_testing_config_file_result
+
+    - name: check epel config files exist
+      assert:
+        that:
+          - check_epel_config_file_result.stat.exists
+          - check_epel_testing_config_file_result.stat.exists
+
+    - name: check that all epel repositories are enabled
+      command: >-
+        grep 'enabled=0'
         {{ epel_config_file }}
         {{ epel_testing_config_file }}
       register: check_enabled_options
