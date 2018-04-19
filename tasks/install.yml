@@ -4,9 +4,11 @@
 - name: setup epel repository package
   package:
     name: >-
-      {{ (epel_state == 'present')
-         | ternary(epel_url, 'epel-release') }}
-    state: "{{ epel_state }}"
+      {{ (epel_state in ["present", "force"])
+         | ternary(epel_url, "epel-release") }}
+    state: >-
+      {{ (epel_state == "force")
+         | ternary("present", epel_state) }}
   tags:
     - role::epel
     - role::epel::packages
