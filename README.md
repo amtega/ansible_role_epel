@@ -33,7 +33,7 @@ This is an example playbook:
     epel_source_enabled: 1
 
     epel_testing_enabled: 1
-    epel_testing_debuginfo_enabled: 1Updated to ansible 2.5
+    epel_testing_debuginfo_enabled: 1
     epel_testing_source_enabled: 1
 ```
 
