@@ -11,7 +11,7 @@ epel_supported_distributions:
 
 epel_supported_versions:
   centos: 6
-  rhel: 7
+  rhel: 6
 
 # Repository package url
 
