@@ -1,6 +1,18 @@
 ---
 # Role variables
 
+# Supported distributions
+
+epel_supported_distributions:
+  - centos
+  - rhel
+
+# Supported distributions versions
+
+epel_supported_versions:
+  centos: 6
+  rhel: 7
+
 # Repository package url
 
 epel_url: >-
