@@ -2,6 +2,7 @@
 # Role dependencies
 
 galaxy_info:
+  role_name: epel
   author: Juan Antonio Valiño García
   description: Setup epel repository
   company: AMTEGA - Xunta de Galicia
