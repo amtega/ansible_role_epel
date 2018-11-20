@@ -1,12 +1,6 @@
 ---
 # Role tasks
 
-- name: sanity checks
-  import_tasks: check.yml
-  tags:
-    - role::epel
-    - role::epel::check
-
 - name: install epel repository
   include_tasks: install.yml
   tags:

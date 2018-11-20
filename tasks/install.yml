@@ -9,6 +9,7 @@
     state: >-
       {{ (epel_state == "force")
          | ternary("present", epel_state) }}
+  environment: "{{ proxy_client_environment }}"
   tags:
     - role::epel
     - role::epel::packages
