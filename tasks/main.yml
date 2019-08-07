@@ -1,14 +1,54 @@
 ---
 # Role tasks
 
-- name: install epel repository
-  include_tasks: install.yml
-  tags:
-    - role::epel
-    - role::epel::install
+- block:
+    - name: Setup epel repository package
+      package:
+        name: >-
+          {{ (epel_state in ["present", "force"])
+             | ternary(epel_url, "epel-release") }}
+        state: >-
+          {{ (epel_state == "force")
+             | ternary("present", epel_state) }}
+      environment: "{{ proxy_client_environment }}"
+      tags:
+        - role::epel::install
 
-- name: configure epel repository
-  include_tasks: configure.yml
+    - name: Configure epel repositories
+      ini_file:
+        path: "{{ item.path }}"
+        section: "{{ item.section }}"
+        option: "enabled"
+        value: "{{ item.enabled }}"
+        no_extra_spaces: true
+      when: epel_state in ["present", "force"]
+      loop:
+        - section: "epel"
+          enabled: "{{ epel_enabled }}"
+          path: "{{ epel_config_file }}"
+
+        - section: "epel-debuginfo"
+          enabled: "{{ epel_debuginfo_enabled }}"
+          path: "{{ epel_config_file }}"
+
+        - section: "epel-source"
+          enabled: "{{ epel_source_enabled }}"
+          path: "{{ epel_config_file }}"
+
+        - section: "epel-testing"
+          enabled: "{{ epel_testing_enabled }}"
+          path: "{{ epel_testing_config_file }}"
+
+        - section: "epel-testing-debuginfo"
+          enabled: "{{ epel_testing_debuginfo_enabled }}"
+          path: "{{ epel_testing_config_file }}"
+
+        - section: "epel-testing-source"
+          enabled: "{{ epel_testing_source_enabled }}"
+          path: "{{ epel_testing_config_file }}"
+      loop_control:
+        label: "{{ item.section }}"
+      tags:
+        - role::epel::configure
   tags:
     - role::epel
-    - role::epel::configure
