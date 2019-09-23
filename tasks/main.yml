@@ -1,6 +1,18 @@
 ---
 # Role tasks
 
+- include_role:
+    name: amtega.check_platform
+  vars:
+    check_platform_distributions:
+      centos: 6
+      rhel: 6
+
+- include_role:
+    name: amtega.proxy_client
+  vars:
+    proxy_client_permanent: no
+
 - block:
     - name: Setup epel repository package
       package:
@@ -50,5 +62,6 @@
         label: "{{ item.section }}"
       tags:
         - role::epel::configure
+  when: ansible_facts.distribution | lower in ["rhel", "centos"]
   tags:
     - role::epel
