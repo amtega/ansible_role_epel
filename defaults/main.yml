@@ -8,10 +8,10 @@ epel_state: present
 
 # Enable or disable EPEL repositories
 
-epel_enabled: 1
-epel_debuginfo_enabled: 0
-epel_source_enabled: 0
+epel_enabled: yes
+epel_debuginfo_enabled: no
+epel_source_enabled: no
 
-epel_testing_enabled: 0
-epel_testing_debuginfo_enabled: 0
-epel_testing_source_enabled: 0
+epel_testing_enabled: no
+epel_testing_debuginfo_enabled: no
+epel_testing_source_enabled: no
