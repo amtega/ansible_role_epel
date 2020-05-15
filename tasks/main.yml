@@ -1,16 +1,45 @@
 ---
 # Role tasks
 
-- include_tasks: configure.yml
-  when: >-
-    ansible_facts.distribution | lower in ["centos", "redhat"]
-    and (epel_facts is not defined
-         or epel_state != epel_facts.state
-         or epel_enabled != epel_facts.enabled
-         or epel_debuginfo_enabled != epel_facts.debuginfo_enabled
-         or epel_source_enabled != epel_facts.source_enabled
-         or epel_testing_enabled != epel_facts.testing_enabled
-         or epel_testing_debuginfo_enabled != epel_facts.testing_debuginfo_enabled
-         or epel_testing_source_enabled != epel_facts.testing_source_enabled)
+- name: Gather facts
+  setup:
+  when: not ansible_facts.distribution is defined
+  tags:
+    - role::epel
+
+- block:
+    - include_tasks: configure.yml
+      when: >-
+        not epel_fact_to_check
+        or epel_state == "force"
+        or epel_state
+          != epel_fact_to_check.state
+        or epel_enabled
+          != epel_fact_to_check.enabled
+        or epel_debuginfo_enabled
+          != epel_fact_to_check.debuginfo_enabled
+        or epel_source_enabled
+          != epel_fact_to_check.source_enabled
+        or epel_testing_enabled
+          != epel_fact_to_check.testing_enabled
+        or epel_testing_debuginfo_enabled
+          != epel_fact_to_check.testing_debuginfo_enabled
+        or epel_testing_source_enabled
+          != epel_fact_to_check.testing_source_enabled
+
+    - include_tasks: local_fact.yml
+      when: >-
+        ansible_local.epel is not defined
+        or epel_configure_result | default({}) is changed
+        or epel_configure_result.results
+           | default([])
+           | select("changed")
+           | list
+           | length > 0
+
+  when: ansible_facts.distribution | lower in ["centos", "redhat"]
+  vars:
+    epel_fact_to_check: >-
+      {{ epel_fact | default(ansible_local.epel) | default(false) }}
   tags:
     - role::epel

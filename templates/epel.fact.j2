@@ -1,0 +1,9 @@
+{
+  "state": {{ epel_state | to_json }},
+  "enabled": {{ epel_enabled | to_json }},
+  "debuginfo_enabled": {{ epel_debuginfo_enabled | to_json }},
+  "source_enabled": {{ epel_source_enabled | to_json }},
+  "testing_enabled": {{ epel_testing_enabled | to_json }},
+  "testing_debuginfo_enabled": {{ epel_testing_debuginfo_enabled | to_json }},
+  "testing_source_enabled": {{ epel_testing_source_enabled | to_json }}
+}

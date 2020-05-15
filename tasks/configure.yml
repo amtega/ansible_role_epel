@@ -10,6 +10,7 @@
         state: >-
           {{ (epel_state == "force")
              | ternary("present", epel_state) }}
+      register: epel_package_result
       environment: "{{ proxy_client_environment }}"
       tags:
         - role::epel::install
@@ -22,6 +23,7 @@
         value: "{{ (item.enabled) | ternary(1, 0) }}"
         no_extra_spaces: true
       when: epel_state in ["present", "force"]
+      register: epel_configure_result
       loop:
         - section: "epel"
           enabled: "{{ epel_enabled }}"
@@ -51,9 +53,9 @@
       tags:
         - role::epel::configure
 
-    - name: Setup epel facts
+    - name: Setup epel fact
       set_fact:
-        epel_facts:
+        epel_fact:
           state: "{{ epel_state }}"
           enabled: "{{ epel_enabled }}"
           debuginfo_enabled: "{{ epel_debuginfo_enabled }}"
