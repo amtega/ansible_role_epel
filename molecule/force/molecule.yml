@@ -1,0 +1,39 @@
+---
+
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: centos6
+    image: centos:6
+    groups:
+      - molecule_hosts
+  - name: centos7
+    image: centos:7
+    groups:
+      - molecule_hosts
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      molecule_hosts:
+        ansible_user: root
+
+        epel_state: force
+
+        epel_enabled: 1
+        epel_debuginfo_enabled: 1
+        epel_source_enabled: 1
+
+        epel_testing_enabled: 1
+        epel_testing_debuginfo_enabled: 1
+        epel_testing_source_enabled: 1
+  lint:
+    name: ansible-lint
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

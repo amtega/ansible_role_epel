@@ -1,0 +1,30 @@
+---
+
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: centos6
+    image: centos:6
+    groups:
+      - molecule_hosts
+  - name: centos7
+    image: centos:7
+    groups:
+      - molecule_hosts
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      molecule_hosts:
+        ansible_user: root
+        epel_state: absent
+  lint:
+    name: ansible-lint
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

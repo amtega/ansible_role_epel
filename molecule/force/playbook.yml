@@ -1,0 +1,33 @@
+---
+
+- name: Test epel repository force install and enable
+  hosts: molecule_hosts
+  roles:
+    - amtega.epel
+  tasks:
+    - name: Check epel repository config file
+      stat:
+        path: "{{ epel_config_file }}"
+      register: check_epel_config_file_result
+
+    - name: Check epel testing repository config file
+      stat:
+        path: "{{ epel_testing_config_file }}"
+      register: check_epel_testing_config_file_result
+
+    - name: Check epel config files exist
+      assert:
+        that:
+          - check_epel_config_file_result.stat.exists
+          - check_epel_testing_config_file_result.stat.exists
+
+    - name: Check that all epel repositories are enabled
+      command: >-
+        grep 'enabled=0'
+        {{ epel_config_file }}
+        {{ epel_testing_config_file }}
+      register: check_enabled_options
+      failed_when: >-
+        check_enabled_options.rc != 1
+        or check_enabled_options.stdout | length > 0
+      changed_when: false
