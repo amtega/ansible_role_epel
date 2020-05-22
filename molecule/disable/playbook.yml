@@ -1,0 +1,17 @@
+---
+
+- name: Test epel repository install and disable
+  hosts: molecule_hosts
+  roles:
+    - amtega.epel
+  tasks:
+    - name: Check that all epel repositories are disabled
+      command: >-
+        grep 'enabled=1'
+        {{ epel_config_file }}
+        {{ epel_testing_config_file }}
+      register: check_enabled_options
+      failed_when: >-
+        check_enabled_options.rc != 1
+        or check_enabled_options.stdout | length > 0
+      changed_when: false

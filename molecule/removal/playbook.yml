@@ -1,0 +1,32 @@
+---
+
+- name: Test epel repository removal
+  hosts: molecule_hosts
+  roles:
+    - amtega.epel
+  tasks:
+    - name: Check epel repository config file
+      stat:
+        path: "{{ epel_config_file }}"
+      register: check_epel_config_file_result
+
+    - name: Check epel testing repository config file
+      stat:
+        path: "{{ epel_testing_config_file }}"
+      register: check_epel_testing_config_file_result
+
+    - name: Check epel config files exist
+      assert:
+        that:
+          - not check_epel_config_file_result.stat.exists
+          - not check_epel_testing_config_file_result.stat.exists
+
+    - name: Check that all epel packages were removed
+      shell: >-
+        set -o pipefail # Raise internal pipe errors
+        yum list installed epel* | grep epel
+      args:
+        warn: false
+      register: check_packages
+      failed_when: check_packages.stdout | length > 0
+      changed_when: false
