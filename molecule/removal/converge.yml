@@ -1,0 +1,6 @@
+---
+
+- name: Test epel repository removal
+  hosts: molecule_hosts
+  roles:
+    - amtega.epel

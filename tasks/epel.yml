@@ -1,0 +1,74 @@
+---
+# Configure epel tasks
+
+- include_role:
+    name: amtega.proxy_client
+  vars:
+    proxy_client_permanent: no
+
+- name: Setup epel repository package
+  package:
+    name: >-
+      {{ (epel_state in ["present", "force"])
+         | ternary(epel_url, "epel-release") }}
+    state: >-
+      {{ (epel_state == "force")
+         | ternary("present", epel_state) }}
+  register: epel_package_result
+  environment: "{{ proxy_client_environment }}"
+  tags:
+    - role::epel::install
+
+- name: Configure epel repositories
+  ini_file:
+    path: "{{ item.path }}"
+    section: "{{ item.section }}"
+    option: "enabled"
+    value: "{{ (item.enabled) | ternary(1, 0) }}"
+    no_extra_spaces: true
+  when: epel_state in ["present", "force"]
+  register: epel_configure_result
+  loop:
+    - section: "epel"
+      enabled: "{{ epel_enabled }}"
+      path: "{{ epel_config_file }}"
+
+    - section: "epel-debuginfo"
+      enabled: "{{ epel_debuginfo_enabled }}"
+      path: "{{ epel_config_file }}"
+
+    - section: "epel-source"
+      enabled: "{{ epel_source_enabled }}"
+      path: "{{ epel_config_file }}"
+
+    - section: "epel-testing"
+      enabled: "{{ epel_testing_enabled }}"
+      path: "{{ epel_testing_config_file }}"
+
+    - section: "epel-testing-debuginfo"
+      enabled: "{{ epel_testing_debuginfo_enabled }}"
+      path: "{{ epel_testing_config_file }}"
+
+    - section: "epel-testing-source"
+      enabled: "{{ epel_testing_source_enabled }}"
+      path: "{{ epel_testing_config_file }}"
+  loop_control:
+    label: "{{ item.section }}"
+  tags:
+    - role::epel::configure
+
+- name: Setup local facts directory
+  file:
+    path: /etc/ansible/facts.d
+    state: directory
+
+- name: Setup local fact
+  template:
+    src: epel.fact.j2
+    dest: /etc/ansible/facts.d/epel.fact
+    mode: 0640
+  register: epel_setup_local_fact_result
+
+- name: Refresh local facts
+  setup:
+  when: epel_setup_local_fact_result is changed
