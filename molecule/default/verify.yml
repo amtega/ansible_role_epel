@@ -1,9 +1,7 @@
 ---
 
-- name: Test epel repository force install and enable
+- name: Verify
   hosts: molecule_hosts
-  roles:
-    - amtega.epel
   tasks:
     - name: Check epel repository config file
       stat:

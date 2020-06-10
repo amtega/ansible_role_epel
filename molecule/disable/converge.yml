@@ -1,0 +1,6 @@
+---
+
+- name: Test epel repository install and disable
+  hosts: molecule_hosts
+  roles:
+    - amtega.epel

@@ -1,0 +1,6 @@
+---
+
+- name: Test epel repository force install and enable
+  hosts: molecule_hosts
+  roles:
+    - amtega.epel

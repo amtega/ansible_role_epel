@@ -12,3 +12,23 @@ epel_url: >-
 
 epel_config_file: /etc/yum.repos.d/epel.repo
 epel_testing_config_file: /etc/yum.repos.d/epel-testing.repo
+
+# Variable to indicate if epel configuration is required
+
+epel_configuration_required: >-
+  {{ ansible_local.epel is undefined
+     or epel_state == "force"
+     or epel_state
+      != ansible_local.epel.state
+     or epel_enabled
+      != ansible_local.epel.enabled
+     or epel_debuginfo_enabled
+      != ansible_local.epel.debuginfo_enabled
+     or epel_source_enabled
+      != ansible_local.epel.source_enabled
+     or epel_testing_enabled
+      != ansible_local.epel.testing_enabled
+     or epel_testing_debuginfo_enabled
+      != ansible_local.epel.testing_debuginfo_enabled
+     or epel_testing_source_enabled
+      != ansible_local.epel.testing_source_enabled }}
