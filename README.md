@@ -34,7 +34,7 @@ This is an example playbook:
 Tests are based on [molecule with role docker containers](https://molecule.readthedocs.io/en/latest/installation.html).
 
 ```shell
-cd amtega.epel/tests
+cd amtega.epel
 
 molecule test --all
 ```
