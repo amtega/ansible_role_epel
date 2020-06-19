@@ -10,12 +10,21 @@
   package:
     name: >-
       {{ (epel_state in ["present", "force"])
-         | ternary(epel_url, "epel-release") }}
+         | ternary(epel_package_url, "epel-release") }}
     state: >-
       {{ (epel_state == "force")
          | ternary("present", epel_state) }}
   register: epel_package_result
+  until: epel_package_result is success
+  retries: "{{ epel_mirrors | length }}"
+  delay: 0
   environment: "{{ proxy_client_environment }}"
+  vars:
+    epel_package_url: >-
+      {{ epel_mirrors[range(epel_mirrors | length) | random]
+         + "/epel-release-latest-"
+         + ansible_facts.distribution_major_version
+         + ".noarch.rpm" }}
   tags:
     - role::epel::install
 
