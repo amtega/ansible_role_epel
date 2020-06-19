@@ -6,27 +6,28 @@
   vars:
     proxy_client_permanent: no
 
-- name: Setup epel repository package
-  package:
-    name: >-
-      {{ (epel_state in ["present", "force"])
-         | ternary(epel_package_url, "epel-release") }}
-    state: >-
-      {{ (epel_state == "force")
-         | ternary("present", epel_state) }}
-  register: epel_package_result
-  until: epel_package_result is success
-  retries: "{{ epel_mirrors | length }}"
-  delay: 0
-  environment: "{{ proxy_client_environment }}"
+- include_tasks: epel_package.yml
   vars:
+    epel_message: ""
     epel_package_url: >-
-      {{ epel_mirrors[range(epel_mirrors | length) | random]
+      {{ epel_url
          + "/epel-release-latest-"
          + ansible_facts.distribution_major_version
          + ".noarch.rpm" }}
-  tags:
-    - role::epel::install
+
+- include_tasks: epel_package.yml
+  when: epel_package_result is failed
+  vars:
+    epel_message: "(from alternative url)"
+    epel_package_url: >-
+      {{ epel_url_alternative
+         + "/epel-release-latest-"
+         + ansible_facts.distribution_major_version
+         + ".noarch.rpm" }}
+
+- name: Assert epel package was installed
+  assert:
+    that: epel_package_result is success or epel_package_result is skipped
 
 - name: Configure epel repositories
   ini_file:
