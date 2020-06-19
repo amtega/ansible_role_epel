@@ -15,3 +15,17 @@ epel_source_enabled: no
 epel_testing_enabled: no
 epel_testing_debuginfo_enabled: no
 epel_testing_source_enabled: no
+
+# EPEL mirrors
+
+epel_mirrors:
+  - http://dl.fedoraproject.org/pub/epel
+  - http://mirrors.kernel.org/fedora-epel
+  - http://dfw.mirror.rackspace.com/epel
+  - http://download-ib01.fedoraproject.org/pub/epel
+  - https://ewr.edge.kernel.org/fedora-buffet/epel
+  - http://iad.mirror.rackspace.com/epel
+  - http://linux-mirrors.fnal.gov/linux/fedora/epel
+  - http://mirror.grid.uchicago.edu/pub/linux/epel
+  - http://mirror.oss.ou.edu/epel
+  - http://mirrors.lug.mtu.edu/epel
