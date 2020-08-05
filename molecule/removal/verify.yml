@@ -21,7 +21,7 @@
 
     - name: Check that all epel packages were removed
       shell: >-
-        set -o pipefail # Raise internal pipe errors
+        set -o pipefail ;
         yum list installed epel* | grep epel
       args:
         warn: false
