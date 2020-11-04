@@ -4,6 +4,7 @@
 - block:
     - include_tasks: configure.yml
       when:
+        - epel_management | bool
         - >-
           ansible_facts.distribution is undefined
           or epel_configuration_required | bool
