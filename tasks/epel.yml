@@ -6,28 +6,34 @@
   vars:
     proxy_client_permanent: no
 
-- include_tasks: epel_package.yml
-  vars:
-    epel_message: ""
-    epel_package_url: >-
-      {{ epel_url
-         + "/epel-release-latest-"
-         + ansible_facts.distribution_major_version
-         + ".noarch.rpm" }}
+- include_tasks: "epel_archive_{{ epel_state }}.yml"
+  when: ansible_facts.distribution_major_version is version("7", "<")
 
-- include_tasks: epel_package.yml
-  when: epel_package_result is failed
-  vars:
-    epel_message: "(from alternative url)"
-    epel_package_url: >-
-      {{ epel_url_alternative
-         + "/epel-release-latest-"
-         + ansible_facts.distribution_major_version
-         + ".noarch.rpm" }}
+- when: ansible_facts.distribution_major_version is version("7", ">=")
+  block:
+    - include_tasks: epel_package.yml
+      vars:
+        epel_message: ""
+        epel_package_url: >-
+          {{ epel_url
+             + "/epel-release-latest-"
+             + ansible_facts.distribution_major_version
+             + ".noarch.rpm" }}
 
-- name: Assert epel package was installed
-  assert:
-    that: epel_package_result is success or epel_package_result is skipped
+    - include_tasks: epel_package.yml
+      when: epel_package_result is failed
+      vars:
+        epel_message: "(from alternative url)"
+        epel_package_url: >-
+          {{ epel_url_alternative
+             + "/epel-release-latest-"
+             + ansible_facts.distribution_major_version
+             + ".noarch.rpm" }}
+
+    - name: Assert epel package was installed
+      assert:
+        that: >-
+          epel_package_result is success or epel_package_result is skipped
 
 - name: Configure epel repositories
   ini_file:

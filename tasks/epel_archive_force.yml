@@ -1,0 +1,4 @@
+---
+# Setup epel archive (force)
+
+- include_tasks: epel_archive_present.yml

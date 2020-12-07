@@ -1,0 +1,20 @@
+[epel-testing]
+name=Extra Packages for Enterprise Linux {{ ansible_facts.distribution_major_version }} - Testing - $basearch
+baseurl={{ epel_archive_url }}/testing/{{ ansible_facts.distribution_major_version }}/$basearch
+failovermethod=priority
+enabled={{ (epel_testing_enabled | bool) | ternary(1, 0) }}
+gpgcheck=0
+
+[epel-testing-debuginfo]
+name=Extra Packages for Enterprise Linux {{ ansible_facts.distribution_major_version }} - Testing - $basearch - Debug
+baseurl={{ epel_archive_url }}/testing/{{ ansible_facts.distribution_major_version }}/$basearch/debug
+failovermethod=priority
+enabled={{ (epel_testing_debuginfo_enabled | bool) | ternary(1, 0) }}
+gpgcheck=0
+
+[epel-testing-source]
+name=Extra Packages for Enterprise Linux {{ ansible_facts.distribution_major_version }} - Testing - $basearch - Source
+baseurl={{ epel_archive_url }}/testing/{{ ansible_facts.distribution_major_version }}/SRPMS
+failovermethod=priority
+enabled={{ (epel_testing_source_enabled | bool) | ternary(1, 0) }}
+gpgcheck=0

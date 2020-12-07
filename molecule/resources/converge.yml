@@ -1,6 +1,18 @@
 ---
 
-- name: Test epel repository removal
+- name: Test epel repository setup
   hosts: molecule_hosts
   roles:
     - amtega.epel
+  tasks:
+    - name: Setup package from epel
+      yum:
+        name: 2ping
+        disablerepo:
+          - base
+          - extras
+          - updates
+        state: present
+      when:
+        - epel_state == "present"
+        - epel_enabled != 0
