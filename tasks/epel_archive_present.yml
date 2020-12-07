@@ -1,0 +1,23 @@
+---
+# Setup epel archive
+
+- block:
+    - name: Setup epel archive repository
+      template:
+        src: epel.repo.j2
+        dest: /etc/yum.repos.d/epel.repo
+        owner: root
+        group: root
+        mode: 0644
+        backup: no
+
+    - name: Setup epel-testing archive repository
+      template:
+        src: epel_testing.repo.j2
+        dest: /etc/yum.repos.d/epel-testing.repo
+        owner: root
+        group: root
+        mode: 0644
+        backup: no
+  tags:
+    - role::epel::install

@@ -1,0 +1,21 @@
+[epel]
+name=Extra Packages for Enterprise Linux {{ ansible_facts.distribution_major_version }} - $basearch
+baseurl={{ epel_archive_url }}/{{ ansible_facts.distribution_major_version }}/$basearch
+failovermethod=priority
+enabled={{ (epel_enabled | bool) | ternary(1, 0) }}
+gpgcheck=0
+priority=2
+
+[epel-debuginfo]
+name=Extra Packages for Enterprise Linux {{ ansible_facts.distribution_major_version }} - $basearch - Debug
+baseurl={{ epel_archive_url }}/{{ ansible_facts.distribution_major_version }}/$basearch/debug
+failovermethod=priority
+enabled={{ (epel_debuginfo_enabled | bool) | ternary(1, 0) }}
+gpgcheck=0
+
+[epel-source]
+name=Extra Packages for Enterprise Linux {{ ansible_facts.distribution_major_version }} - $basearch - Source
+baseurl={{ epel_archive_url }}/{{ ansible_facts.distribution_major_version }}/SRPMS
+failovermethod=priority
+enabled={{ (epel_source_enabled | bool) | ternary(1, 0) }}
+gpgcheck=0

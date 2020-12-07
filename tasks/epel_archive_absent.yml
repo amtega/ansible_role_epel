@@ -1,0 +1,15 @@
+---
+# Remove epel archive
+
+- block:
+    - name: Setup epel archive repository
+      file:
+        path: /etc/yum.repos.d/epel.repo
+        state: absent
+
+    - name: Setup epel-testing archive repository
+      file:
+        path: /etc/yum.repos.d/epel-testing.repo
+        state: absent
+  tags:
+    - role::epel::install

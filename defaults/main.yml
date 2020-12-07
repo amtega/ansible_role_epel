@@ -24,6 +24,10 @@ epel_url: http://dl.fedoraproject.org/pub/epel
 
 epel_url_alternative: http://mirrors.kernel.org/fedora-epel
 
+# EPEL archive URL
+
+epel_archive_url: https://archives.fedoraproject.org/pub/archive/epel
+
 # Manage EPEL. If set to 'no' the role will do nothing
 
 epel_management: yes

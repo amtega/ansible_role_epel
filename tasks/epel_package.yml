@@ -1,5 +1,5 @@
 ---
-# Setup epel pacakge tasks
+# Setup epel package tasks
 
 - name: "Setup epel repository package {{ epel_message }}"
   package:
