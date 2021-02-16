@@ -7,7 +7,7 @@
   tasks:
     - name: Setup package from epel
       yum:
-        name: 2ping
+        name: atop
         disablerepo:
           - base
           - extras

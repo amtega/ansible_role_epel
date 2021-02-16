@@ -31,3 +31,7 @@ epel_archive_url: https://archives.fedoraproject.org/pub/archive/epel
 # Manage EPEL. If set to 'no' the role will do nothing
 
 epel_management: yes
+
+# Disable GPG check during epel package management
+
+epel_disable_gpg_check: yes

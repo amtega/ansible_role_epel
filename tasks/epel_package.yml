@@ -2,13 +2,14 @@
 # Setup epel package tasks
 
 - name: "Setup epel repository package {{ epel_message }}"
-  package:
+  yum:
     name: >-
       {{ (epel_state in ["present", "force"])
          | ternary(epel_package_url, "epel-release") }}
     state: >-
       {{ (epel_state == "force")
          | ternary("present", epel_state) }}
+    disable_gpg_check: "{{ epel_disable_gpg_check }}"
   ignore_errors: yes
   register: epel_package_result
   environment: "{{ proxy_client_environment }}"
