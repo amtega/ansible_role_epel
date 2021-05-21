@@ -1,7 +1,8 @@
 ---
 # Configure epel tasks
 
-- include_role:
+- name: Setup proxy client
+  include_role:
     name: amtega.proxy_client
   vars:
     proxy_client_permanent: no
@@ -41,7 +42,7 @@
     section: "{{ item.section }}"
     option: "enabled"
     value: "{{ (item.enabled) | ternary(1, 0) }}"
-    no_extra_spaces: true
+    no_extra_spaces: yes
     mode: 0644
   when: epel_state in ["present", "force"]
   register: epel_configure_result
@@ -87,6 +88,6 @@
     mode: 0640
   register: epel_setup_local_fact_result
 
-- name: Refresh local facts
+- name: Refresh local facts # noqa no-handler
   setup:
   when: epel_setup_local_fact_result is changed
