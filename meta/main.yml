@@ -3,17 +3,18 @@
 
 galaxy_info:
   role_name: epel
+  namespace: amtega
   author: Juan Antonio Valiño García
   description: Setup epel repository
   company: AMTEGA - Xunta de Galicia
   license: GPLv3 or EUPL
   min_ansible_version: 2.9
   platforms:
-  - name: EL
-    versions:
-      - 6
-      - 7
-      - 8
+    - name: EL
+      versions:
+        - 6
+        - 7
+        - 8
   galaxy_tags:
     - system
     - yum

@@ -24,7 +24,7 @@
         set -o pipefail ;
         yum list installed epel* | grep epel
       args:
-        warn: false
+        warn: no
       register: check_packages
       failed_when: check_packages.stdout | length > 0
-      changed_when: false
+      changed_when: no

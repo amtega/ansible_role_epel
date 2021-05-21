@@ -12,6 +12,6 @@
     disable_gpg_check: "{{ epel_disable_gpg_check }}"
   ignore_errors: yes
   register: epel_package_result
-  environment: "{{ proxy_client_environment }}"
+  environment: "{{ proxy_client_environment | default({}) }}"
   tags:
     - role::epel::install
