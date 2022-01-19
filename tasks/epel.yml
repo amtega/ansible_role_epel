@@ -33,6 +33,7 @@
 
     - name: Assert epel package was installed
       assert:
+        quiet: yes
         that: >-
           epel_package_result is success or epel_package_result is skipped
 
