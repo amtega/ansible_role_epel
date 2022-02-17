@@ -7,5 +7,5 @@
 
 - include_tasks: epel.yml
   when:
-    - ansible_facts.distribution | lower in ["centos", "redhat"]
+    - ansible_facts.distribution | lower != "fedora"
     - epel_configuration_required | bool

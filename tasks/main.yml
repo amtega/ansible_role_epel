@@ -11,7 +11,7 @@
         - ansible_facts.distribution
           | default("centos")
           | lower
-          in ["centos", "redhat"]
+          != "fedora"
 
   tags:
     - role::epel
