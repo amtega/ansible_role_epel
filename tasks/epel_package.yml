@@ -1,8 +1,7 @@
 ---
-# Setup epel package tasks
 
 - name: "Setup epel repository package {{ epel_message }}"
-  yum:
+  ansible.builtin.yum:
     name: >-
       {{ (epel_state in ["present", "force"])
          | ternary(epel_package_url, "epel-release") }}
