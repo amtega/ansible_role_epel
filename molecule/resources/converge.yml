@@ -6,7 +6,7 @@
     - amtega.epel
   tasks:
     - name: Setup package from epel
-      yum:
+      ansible.builtin.yum:
         name: atop
         disablerepo:
           - base

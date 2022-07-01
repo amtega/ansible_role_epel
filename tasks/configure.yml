@@ -1,11 +1,10 @@
 ---
-# Role configuration tasks
 
 - name: Gather facts
-  setup:
+  ansible.builtin.setup:
   when: ansible_facts.distribution is undefined
 
-- include_tasks: epel.yml
+- ansible.builtin.include_tasks: epel.yml
   when:
     - ansible_facts.distribution | lower != "fedora"
     - epel_configuration_required | bool

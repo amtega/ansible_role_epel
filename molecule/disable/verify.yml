@@ -4,7 +4,7 @@
   hosts: molecule_hosts
   tasks:
     - name: Check that all epel repositories are disabled
-      command: >-
+      ansible.builtin.command: >-
         grep 'enabled=1'
         {{ epel_config_file }}
         {{ epel_testing_config_file }}
