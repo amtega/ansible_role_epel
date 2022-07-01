@@ -1,4 +1,4 @@
 ---
-# Setup epel archive (force)
 
-- include_tasks: epel_archive_present.yml
+- name: Force epel archive setup
+  ansible.builtin.include_tasks: epel_archive_present.yml

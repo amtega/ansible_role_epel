@@ -1,9 +1,9 @@
 ---
-# Setup epel archive
 
-- block:
+- name: Setup epel archive
+  block:
     - name: Setup epel archive repository
-      template:
+      ansible.builtin.template:
         src: epel.repo.j2
         dest: /etc/yum.repos.d/epel.repo
         owner: root
@@ -12,7 +12,7 @@
         backup: no
 
     - name: Setup epel-testing archive repository
-      template:
+      ansible.builtin.template:
         src: epel_testing.repo.j2
         dest: /etc/yum.repos.d/epel-testing.repo
         owner: root

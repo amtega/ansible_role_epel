@@ -4,23 +4,23 @@
   hosts: molecule_hosts
   tasks:
     - name: Check epel repository config file
-      stat:
+      ansible.builtin.stat:
         path: "{{ epel_config_file }}"
       register: check_epel_config_file_result
 
     - name: Check epel testing repository config file
-      stat:
+      ansible.builtin.stat:
         path: "{{ epel_testing_config_file }}"
       register: check_epel_testing_config_file_result
 
     - name: Check epel config files exist
-      assert:
+      ansible.builtin.assert:
         that:
           - check_epel_config_file_result.stat.exists
           - check_epel_testing_config_file_result.stat.exists
 
     - name: Check that all epel repositories are enabled
-      command: >-
+      ansible.builtin.command: >-
         grep 'enabled=0'
         {{ epel_config_file }}
         {{ epel_testing_config_file }}

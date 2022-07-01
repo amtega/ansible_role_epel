@@ -2,7 +2,7 @@
 # Configure epel tasks
 
 - name: Setup proxy client
-  include_role:
+  ansible.builtin.include_role:
     name: amtega.proxy_client
   vars:
     proxy_client_permanent: no
@@ -10,7 +10,8 @@
 - include_tasks: "epel_archive_{{ epel_state }}.yml"
   when: ansible_facts.distribution_major_version is version("7", "<")
 
-- when: ansible_facts.distribution_major_version is version("7", ">=")
+- name: Setup epel for distros >= 7
+  when: ansible_facts.distribution_major_version is version("7", ">=")
   block:
     - include_tasks: epel_package.yml
       vars:
@@ -32,7 +33,7 @@
              + ".noarch.rpm" }}
 
     - name: Assert epel package was installed
-      assert:
+      ansible.builtin.assert:
         quiet: yes
         that: >-
           epel_package_result is success or epel_package_result is skipped
@@ -77,18 +78,18 @@
     - role::epel::configure
 
 - name: Setup local facts directory
-  file:
+  ansible.builtin.file:
     path: /etc/ansible/facts.d
     state: directory
     mode: 0775
 
 - name: Setup local fact
-  template:
+  ansible.builtin.template:
     src: epel.fact.j2
     dest: /etc/ansible/facts.d/epel.fact
     mode: 0640
   register: epel_setup_local_fact_result
 
 - name: Refresh local facts # noqa no-handler
-  setup:
+  ansible.builtin.setup:
   when: epel_setup_local_fact_result is changed

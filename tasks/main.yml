@@ -1,7 +1,8 @@
 ---
 # Role tasks
 
-- block:
+- name: Setup epel
+  block:
     - include_tasks: configure.yml
       when:
         - epel_management | bool
@@ -12,6 +13,5 @@
           | default("centos")
           | lower
           != "fedora"
-
   tags:
     - role::epel
