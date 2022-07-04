@@ -7,13 +7,13 @@
   vars:
     proxy_client_permanent: no
 
-- include_tasks: "epel_archive_{{ epel_state }}.yml"
+- ansible.builtin.include_tasks: "epel_archive_{{ epel_state }}.yml"
   when: ansible_facts.distribution_major_version is version("7", "<")
 
 - name: Setup epel for distros >= 7
   when: ansible_facts.distribution_major_version is version("7", ">=")
   block:
-    - include_tasks: epel_package.yml
+    - ansible.builtin.include_tasks: epel_package.yml
       vars:
         epel_message: ""
         epel_package_url: >-
@@ -22,7 +22,7 @@
              + ansible_facts.distribution_major_version
              + ".noarch.rpm" }}
 
-    - include_tasks: epel_package.yml
+    - ansible.builtin.include_tasks: epel_package.yml
       when: epel_package_result is failed
       vars:
         epel_message: "(from alternative url)"
