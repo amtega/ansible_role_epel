@@ -1,6 +1,5 @@
 ---
-
-- name: "Setup epel repository package {{ epel_message }}"
+- name: Setup epel repository package {{ epel_message }}
   ansible.builtin.yum:
     name: >-
       {{ (epel_state in ["present", "force"])

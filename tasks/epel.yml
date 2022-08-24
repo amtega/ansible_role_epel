@@ -7,7 +7,7 @@
   vars:
     proxy_client_permanent: no
 
-- ansible.builtin.include_tasks: "epel_archive_{{ epel_state }}.yml"
+- ansible.builtin.include_tasks: epel_archive_{{ epel_state }}.yml
   when: ansible_facts.distribution_major_version is version("7", "<")
 
 - name: Setup epel for distros >= 7
@@ -25,7 +25,7 @@
     - ansible.builtin.include_tasks: epel_package.yml
       when: epel_package_result is failed
       vars:
-        epel_message: "(from alternative url)"
+        epel_message: (from alternative url)
         epel_package_url: >-
           {{ epel_url_alternative
              + "/epel-release-latest-"
@@ -42,34 +42,34 @@
   ini_file:
     path: "{{ item.path }}"
     section: "{{ item.section }}"
-    option: "enabled"
+    option: enabled
     value: "{{ (item.enabled) | ternary(1, 0) }}"
     no_extra_spaces: yes
     mode: 0644
   when: epel_state in ["present", "force"]
   register: epel_configure_result
   loop:
-    - section: "epel"
+    - section: epel
       enabled: "{{ epel_enabled }}"
       path: "{{ epel_config_file }}"
 
-    - section: "epel-debuginfo"
+    - section: epel-debuginfo
       enabled: "{{ epel_debuginfo_enabled }}"
       path: "{{ epel_config_file }}"
 
-    - section: "epel-source"
+    - section: epel-source
       enabled: "{{ epel_source_enabled }}"
       path: "{{ epel_config_file }}"
 
-    - section: "epel-testing"
+    - section: epel-testing
       enabled: "{{ epel_testing_enabled }}"
       path: "{{ epel_testing_config_file }}"
 
-    - section: "epel-testing-debuginfo"
+    - section: epel-testing-debuginfo
       enabled: "{{ epel_testing_debuginfo_enabled }}"
       path: "{{ epel_testing_config_file }}"
 
-    - section: "epel-testing-source"
+    - section: epel-testing-source
       enabled: "{{ epel_testing_source_enabled }}"
       path: "{{ epel_testing_config_file }}"
   loop_control:

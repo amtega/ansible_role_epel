@@ -9,9 +9,6 @@
         - >-
           ansible_facts.distribution is undefined
           or epel_configuration_required | bool
-        - ansible_facts.distribution
-          | default("centos")
-          | lower
-          != "fedora"
+        - ansible_facts.distribution | default("centos") | lower != "fedora"
   tags:
     - role::epel
