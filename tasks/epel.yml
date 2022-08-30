@@ -81,7 +81,7 @@
   ansible.builtin.file:
     path: /etc/ansible/facts.d
     state: directory
-    mode: 0775
+    mode: 0755
 
 - name: Setup local fact
   ansible.builtin.template:
