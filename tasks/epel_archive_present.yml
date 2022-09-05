@@ -1,5 +1,4 @@
 ---
-
 - name: Setup epel archive
   block:
     - name: Setup epel archive repository
