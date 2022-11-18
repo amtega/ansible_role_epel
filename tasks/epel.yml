@@ -39,7 +39,7 @@
           epel_package_result is success or epel_package_result is skipped
 
 - name: Configure epel repositories
-  ini_file:
+  community.general.ini_file:
     path: "{{ item.path }}"
     section: "{{ item.section }}"
     option: enabled
@@ -74,6 +74,55 @@
       path: "{{ epel_testing_config_file }}"
   loop_control:
     label: "{{ item.section }}"
+  tags:
+    - role::epel::configure
+
+- name: Configure epel modular repositories
+  community.general.ini_file:
+    path: "{{ item.path }}"
+    section: "{{ item.section }}"
+    option: enabled
+    value: "{{ (item.enabled) | ternary(1, 0) }}"
+    no_extra_spaces: yes
+    mode: 0644
+  when:
+    - epel_state in ["present", "force"]
+    - ansible_facts.distribution_major_version is version("8", ">=")
+  register: epel_configure_result
+  loop:
+    - section: epel-modular
+      enabled: "{{ epel_modular_enabled }}"
+      path: "{{ epel_modular_config_file }}"
+
+    - section: epel-modular-debuginfo
+      enabled: "{{ epel_modular_debuginfo_enabled }}"
+      path: "{{ epel_modular_config_file }}"
+
+    - section: epel-modular-source
+      enabled: "{{ epel_modular_source_enabled }}"
+      path: "{{ epel_modular_config_file }}"
+
+    - section: epel-testing-modular
+      enabled: "{{ epel_testing_modular_enabled }}"
+      path: "{{ epel_testing_modular_config_file }}"
+
+    - section: epel-testing-modular-debuginfo
+      enabled: "{{ epel_testing_modular_debuginfo_enabled }}"
+      path: "{{ epel_testing_modular_config_file }}"
+
+    - section: epel-testing-modular-source
+      enabled: "{{ epel_testing_modular_source_enabled }}"
+      path: "{{ epel_testing_modular_config_file }}"
+  loop_control:
+    label: "{{ item.section }}"
+  tags:
+    - role::epel::configure
+
+- name: Configure epel mirrors
+  ansible.builtin.include_tasks: mirror.yml
+  loop: "{{ epel_local_mirrors }}"
+  loop_control:
+    loop_var: mirror
   tags:
     - role::epel::configure
 
