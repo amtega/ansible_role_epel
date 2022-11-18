@@ -1,0 +1,69 @@
+---
+# Role tasks
+
+- name: Setup mirrors
+  block:
+    - name: Disable mirrorlist
+      community.general.ini_file:
+        path: "{{ mirror.path }}"
+        section: "{{ mirror.section }}"
+        option: metalink
+        state: absent
+        no_extra_spaces: yes
+        mode: 0644
+
+    - name: Disable gpg check
+      when: epel_disable_gpg_check
+      block:
+        - name: Disable check
+          community.general.ini_file:
+            path: "{{ mirror.path }}"
+            section: "{{ mirror.section }}"
+            option: gpgcheck
+            value: 0
+            no_extra_spaces: yes
+            mode: 0644
+
+        - name: Disable gpg key file
+          community.general.ini_file:
+            path: "{{ mirror.path }}"
+            section: "{{ mirror.section }}"
+            option: gpgkey
+            state: absent
+            no_extra_spaces: yes
+            mode: 0644
+
+    - name: Enable gpg check
+      when:
+        - not epel_disable_gpg_check
+        - mirror.gpgkey_file_path is defined
+      block:
+        - name: Enable check
+          community.general.ini_file:
+            path: "{{ mirror.path }}"
+            section: "{{ mirror.section }}"
+            option: gpgcheck
+            value: 1
+            no_extra_spaces: yes
+            mode: 0644
+
+        - name: Update gpg key file
+          community.general.ini_file:
+            path: "{{ mirror.path }}"
+            section: "{{ mirror.section }}"
+            option: gpgkey
+            value: "{{ mirror.gpgkey_file_path }}"
+            no_extra_spaces: yes
+            mode: 0644
+
+    - name: Set local mirror
+      community.general.ini_file:
+        path: "{{ mirror.path }}"
+        section: "{{ mirror.section }}"
+        option: baseurl
+        value: "{{ mirror.url }}"
+        no_extra_spaces: yes
+        mode: 0644
+
+  tags:
+    - role::epel
