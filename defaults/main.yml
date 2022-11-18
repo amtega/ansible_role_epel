@@ -16,6 +16,14 @@ epel_testing_enabled: no
 epel_testing_debuginfo_enabled: no
 epel_testing_source_enabled: no
 
+epel_modular_enabled: yes
+epel_modular_debuginfo_enabled: no
+epel_modular_source_enabled: no
+
+epel_testing_modular_enabled: no
+epel_testing_modular_debuginfo_enabled: no
+epel_testing_modular_source_enabled: no
+
 # EPEL package URL
 
 epel_url: http://dl.fedoraproject.org/pub/epel
@@ -35,3 +43,15 @@ epel_management: yes
 # Disable GPG check during epel package management
 
 epel_disable_gpg_check: yes
+
+# Manage epel local mirror
+# List of dicts with the open services
+#
+# {
+#   path: <path to epel repo file to manage>
+#   section: <section to manage>
+#   url: < local mirror url>
+#   gpgkey_file_path: <file://KEY_FILEPATH> Path to key file. Mandatory if not
+#                                           epel_disable_gpg_check
+# }
+epel_local_mirrors: []

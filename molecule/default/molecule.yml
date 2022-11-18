@@ -53,5 +53,21 @@ provisioner:
           epel_testing_source_enabled: 1
           epel_config_file: /etc/yum.repos.d/epel.repo
           epel_testing_config_file: /etc/yum.repos.d/epel-testing.repo
+          epel_mirror_url: >-
+            {{ (ansible_facts.distribution_major_version is version("8", "<"))
+               | ternary('http://mirror.uv.es/mirror/fedora-epel/'
+                         + ansible_facts.distribution_major_version
+                         + '/x86_64/',
+                         'http://mirror.uv.es/mirror/fedora-epel/'
+                         + ansible_facts.distribution_major_version
+                         + '/Everything/x86_64/'
+                        ) }}
+          _epel_local_mirrors:
+            - path: "{{ epel_config_file }}"
+              section: epel
+              url: "{{ epel_mirror_url }}"
+          epel_local_mirrors: >-
+            {{ (ansible_facts.distribution_major_version is version("6", "=="))
+                | ternary([], _epel_local_mirrors) }}
 verifier:
   name: ansible

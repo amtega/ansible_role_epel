@@ -5,6 +5,8 @@
 
 epel_config_file: /etc/yum.repos.d/epel.repo
 epel_testing_config_file: /etc/yum.repos.d/epel-testing.repo
+epel_modular_config_file: /etc/yum.repos.d/epel-modular.repo
+epel_testing_modular_config_file: /etc/yum.repos.d/epel-testing-modular.repo
 
 # Variable to indicate if epel configuration is required
 
