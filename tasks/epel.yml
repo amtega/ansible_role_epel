@@ -51,15 +51,15 @@
   loop:
     - section: epel
       enabled: "{{ epel_enabled }}"
-      path: "{{ epel_config_file }}"
+      path: "{{ epel_repo_file_path }}"
 
     - section: epel-debuginfo
       enabled: "{{ epel_debuginfo_enabled }}"
-      path: "{{ epel_config_file }}"
+      path: "{{ epel_repo_file_path }}"
 
     - section: epel-source
       enabled: "{{ epel_source_enabled }}"
-      path: "{{ epel_config_file }}"
+      path: "{{ epel_repo_file_path }}"
 
     - section: epel-testing
       enabled: "{{ epel_testing_enabled }}"

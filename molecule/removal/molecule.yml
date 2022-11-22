@@ -45,7 +45,7 @@ provisioner:
       molecule_hosts:
         vars:
           epel_state: absent
-          epel_config_file: /etc/yum.repos.d/epel.repo
+          epel_repo_file_path: /etc/yum.repos.d/epel.repo
           epel_testing_config_file: /etc/yum.repos.d/epel-testing.repo
 verifier:
   name: ansible

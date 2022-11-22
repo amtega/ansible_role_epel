@@ -5,8 +5,8 @@
   tasks:
     - name: Check epel repository config file
       ansible.builtin.stat:
-        path: "{{ epel_config_file }}"
-      register: check_epel_config_file_result
+        path: "{{ epel_repo_file_path }}"
+      register: check_epel_repo_file_path_result
 
     - name: Check epel testing repository config file
       ansible.builtin.stat:
@@ -16,7 +16,7 @@
     - name: Check epel config files exist
       ansible.builtin.assert:
         that:
-          - not check_epel_config_file_result.stat.exists
+          - not check_epel_repo_file_path_result.stat.exists
           - not check_epel_testing_config_file_result.stat.exists
 
     - name: Check that all epel packages were removed

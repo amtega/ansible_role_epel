@@ -51,7 +51,7 @@ provisioner:
           epel_testing_enabled: 0
           epel_testing_debuginfo_enabled: 0
           epel_testing_source_enabled: 0
-          epel_config_file: /etc/yum.repos.d/epel.repo
+          epel_repo_file_path: /etc/yum.repos.d/epel.repo
           epel_testing_config_file: /etc/yum.repos.d/epel-testing.repo
 verifier:
   name: ansible
