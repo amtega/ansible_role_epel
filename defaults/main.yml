@@ -44,13 +44,12 @@ epel_management: yes
 
 epel_disable_gpg_check: yes
 
-# Manage epel local mirror
-# List of dicts with the open services
+# List of dicts with local mirrors for EPEL. The format of the dicts is this:
 #
 # {
 #   path: <path to epel repo file to manage>
 #   section: <section to manage>
-#   url: < local mirror url>
+#   url: <local mirror url>
 #   gpgkey_file_path: <file://KEY_FILEPATH> Path to key file. Mandatory if not
 #                                           epel_disable_gpg_check
 # }
