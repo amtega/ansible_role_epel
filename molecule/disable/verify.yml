@@ -6,7 +6,7 @@
     - name: Check that all epel repositories are disabled
       ansible.builtin.command: >-
         grep 'enabled=1'
-        {{ epel_config_file }}
+        {{ epel_repo_file_path }}
         {{ epel_testing_config_file }}
       register: check_enabled_options
       failed_when: >-
