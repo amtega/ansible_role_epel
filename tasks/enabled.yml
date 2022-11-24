@@ -1,0 +1,23 @@
+---
+
+- name: Setup epel repositories
+  community.general.ini_file:
+    path: "{{ epel_repository_item.path }}"
+    section: "{{ epel_repository_item.section }}"
+    option: enabled
+    value: "{{ (epel_repository_enabled | bool) | ternary(1, 0) }}"
+    no_extra_spaces: yes
+    mode: 0644
+  register: epel_configure_result
+  loop: "{{ epel_repositories }}"
+  loop_control:
+    loop_var: epel_repository_item
+    label: "{{ epel_repository_item.section }}"
+  vars:
+    epel_repository_enabled: >-
+      {{ lookup("ansible.builtin.vars",
+                "epel%s_enabled"
+                | format(epel_repository_item.section
+                         | regex_replace("-", "_")
+                         | regex_replace("^epel(.*)", "\1"))
+                , default=false) }}

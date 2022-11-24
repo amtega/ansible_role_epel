@@ -1,0 +1,37 @@
+---
+
+- name: Perform epel install
+  block:
+    - name: Setup proxy client
+      ansible.builtin.include_role:
+        name: amtega.proxy_client
+      when: epel_state in ["present", "force"]
+      vars:
+        proxy_client_permanent: no
+
+    - name: Setup epel
+      when: ansible_facts.distribution_major_version is version("7", ">=")
+      block:
+        - name: Setup epel repository package
+          ansible.builtin.include_tasks: package.yml
+          vars:
+            epel_package_url: >-
+              {{ "%s/%s" | format(epel_url, epel_package_file_name) }}
+      rescue:
+        - name: Setup epel repository package from alternative location
+          ansible.builtin.include_tasks: package.yml
+          vars:
+            epel_package_url: >-
+              {{ "%s/%s"
+                 | format(epel_url_alternative, epel_package_file_name) }}
+      vars:
+        epel_package_file_name: >-
+          {{ "epel-release-latest-%s.noarch.rpm"
+            | format(ansible_facts.distribution_major_version) }}
+
+    - name: Setup epel archive
+      ansible.builtin.include_tasks: archive.yml
+      when: ansible_facts.distribution_major_version is version("7", "<")
+  tags:
+    - role::epel
+    - role::epel::install

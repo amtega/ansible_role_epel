@@ -1,7 +1,7 @@
 ---
 
 - name: Test epel repository setup
-  hosts: molecule_hosts
+  hosts: molecule_hosts:!molecule_hosts_centos_6
   roles:
     - amtega.epel
   tasks:
@@ -16,3 +16,26 @@
       when:
         - epel_state == "present"
         - epel_enabled != 0
+
+- name: Test epel repository setup in legacy systems
+  hosts: molecule_hosts_centos_6
+  roles:
+    - amtega.epel
+  tasks:
+    # Ansible yum module does not work in older systems, so we use a direct
+    # command
+    - name: Setup package from epel usin yum command
+      ansible.builtin.command: >-
+        yum install -y atop
+        --disablerepo=base
+        --disablerepo=extras
+        --disablerepo=updates
+      args:
+        warn: no
+      register: yum_result
+      changed_when: yum_result.stdout is search("Installed:")
+      when:
+        - epel_state == "present"
+        - epel_enabled != 0
+      environment:
+        LANGUAGE: en_US

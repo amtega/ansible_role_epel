@@ -1,0 +1,12 @@
+---
+
+- name: Common prepare
+  ansible.builtin.import_playbook: ../resources/prepare.yml
+
+- name: Prepare removal tests
+  hosts: molecule_hosts
+  gather_facts: no
+  roles:
+    - role: amtega.epel
+      vars:
+        epel_state: present
