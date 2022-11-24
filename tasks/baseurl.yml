@@ -1,0 +1,29 @@
+---
+
+- name: Disable epel repositories mirror list
+  community.general.ini_file:
+    path: "{{ epel_repository_item.path }}"
+    section: "{{ epel_repository_item.section }}"
+    option: metalink
+    state: absent
+    no_extra_spaces: yes
+    mode: 0644
+  when: epel_repository_base_url | length > 0
+  loop: "{{ epel_repositories }}"
+  loop_control:
+    loop_var: epel_repository_item
+    label: "{{ epel_repository_item.section }}"
+
+- name: Setup epel repositories baseurl
+  community.general.ini_file:
+    path: "{{ epel_repository_item.path }}"
+    section: "{{ epel_repository_item.section }}"
+    option: baseurl
+    value: "{{ epel_repository_base_url }}"
+    no_extra_spaces: yes
+    mode: 0644
+  when: epel_repository_base_url | length > 0
+  loop: "{{ epel_repositories }}"
+  loop_control:
+    loop_var: epel_repository_item
+    label: "{{ epel_repository_item.section }}"

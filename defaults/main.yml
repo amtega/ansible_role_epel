@@ -32,7 +32,7 @@ epel_url: http://dl.fedoraproject.org/pub/epel
 
 epel_url_alternative: http://mirrors.kernel.org/fedora-epel
 
-# EPEL archive URL
+# EPEL archive URL for distro versions lower than 7
 
 epel_archive_url: https://archives.fedoraproject.org/pub/archive/epel
 
@@ -44,13 +44,28 @@ epel_management: yes
 
 epel_disable_gpg_check: yes
 
-# List of dicts with local mirrors for EPEL. The format of the dicts is this:
-#
-# {
-#   path: <path to epel repo file to manage>
-#   section: <section to manage>
-#   url: <local mirror url>
-#   gpgkey_file_path: <file://KEY_FILEPATH> Path to key file. Mandatory if not
-#                                           epel_disable_gpg_check
-# }
-epel_local_mirrors: []
+# GPP key file. If not defined role use system defaults
+
+# epel_gpg_key_file_path: /etc/pki/rpm-gpg/MY_KEY
+
+
+# Local mirrors. If defined repositories will point to the indicated urls
+
+# epel_local_mirror: http://www.acme.com/mirror/all
+# epel_local_mirror_debuginfo: http://www.acme.com/mirror/debuginfo
+# epel_local_mirror_source: http://www.acme.com/mirror/source
+
+# epel_local_mirror_testing: http://www.acme.com/mirror/test/all
+# epel_local_mirror_testing_debuginfo: http://www.acme.com/mirror/test/debuginfo
+# epel_local_mirror_testing_source: http://www.acme.com/mirror/test/source
+
+# epel_local_mirror_modular: http://www.acme.com/mirror/mod/all
+# epel_local_mirror_modular_debuginfo: http://www.acme.com/mirror/mod/debuginfo
+# epel_local_mirror_modular_source: http://www.acme.com/mirror/mod/source
+
+# epel_local_mirror_testing_modular: >-
+#   http://www.acme.com/mirror/testing_modular/all
+# epel_local_mirror_testing_modular_debuginfo: >-
+#   http://www.acme.com/mirror/testing_modular/debuginfo
+# epel_local_mirror_testing_modular_source: >-
+#   http://www.acme.com/mirror/testing_modular/source

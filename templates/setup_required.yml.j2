@@ -1,5 +1,4 @@
-{
-  "state": {{ epel_state | to_json }},
+{% set config = namespace(changed=false) %}
 {% for epel_repository in epel_repositories %}
 {% set epel_suffix = epel_repository.section
                      | regex_replace("-", "_")
@@ -9,10 +8,21 @@
 {% set epel_repository_enabled =
          lookup("ansible.builtin.vars", epel_enabled_var_name, default=false) %}
 {% if fact_key | length > 0 %}
-{% set separator = "_" %}
+{% set fact_key = fact_key + "_enabled" %}
 {% else %}
-{% set separator = "" %}
+{% set fact_key = "enabled" %}
 {% endif %}
-  "{{ fact_key }}{{ separator }}enabled": {{ epel_repository_enabled | to_json }}{% if not loop.last %},{{ "\n" }}{% else %}{{ "\n" }}{% endif %}
+{% if ansible_local.epel[fact_key] | default(none) != epel_repository_enabled %}
+{% set config.changed = true %}
+{% endif %}
 {% endfor %}
-}
+
+{% if epel_management | bool
+      and (ansible_local.epel is undefined
+           or epel_state == "force"
+           or epel_state != ansible_local.epel.state
+           or config.changed) %}
+true
+{% else %}
+false
+{% endif %}

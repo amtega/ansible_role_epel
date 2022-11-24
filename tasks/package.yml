@@ -1,5 +1,6 @@
 ---
-- name: Setup epel repository package {{ epel_message }}
+
+- name: Setup epel repository package
   ansible.builtin.yum:
     name: >-
       {{ (epel_state in ["present", "force"])
@@ -11,5 +12,3 @@
   ignore_errors: yes
   register: epel_package_result
   environment: "{{ proxy_client_environment | default({}) }}"
-  tags:
-    - role::epel::install

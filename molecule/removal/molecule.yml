@@ -36,7 +36,6 @@ platforms:
 provisioner:
   name: ansible
   playbooks:
-    prepare: ../resources/prepare.yml
     converge: ../resources/converge.yml
     cleanup: ../resources/cleanup.yml
     side_effect: ../resources/side_effect.yml
@@ -45,7 +44,11 @@ provisioner:
       molecule_hosts:
         vars:
           epel_state: absent
-          epel_repo_file_path: /etc/yum.repos.d/epel.repo
-          epel_testing_config_file: /etc/yum.repos.d/epel-testing.repo
+          epel_repo_path: /etc/yum.repos.d/epel.repo
+          epel_testing_repo_path: /etc/yum.repos.d/epel-testing.repo
+      molecule_hosts_centos_6:
+        vars:
+          python_build_install_dir: /opt/python
+          ansible_python_interpreter: /opt/python/bin/python3
 verifier:
   name: ansible
