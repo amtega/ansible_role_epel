@@ -3,11 +3,16 @@
 - name: Verify
   hosts: molecule_hosts
   tasks:
+    - name: Load role internal variables
+      ansible.builtin.include_vars: ../../vars/main.yml
+
     - name: Check that all epel repositories are disabled
       ansible.builtin.command: >-
         grep 'enabled=1'
-        {{ epel_repo_file_path }}
-        {{ epel_testing_config_file }}
+        {{ epel_repositories
+           | map(attribute="path")
+           | list
+           | join(" ") }}
       register: check_enabled_options
       failed_when: >-
         check_enabled_options.rc != 1

@@ -3,21 +3,26 @@
 - name: Verify
   hosts: molecule_hosts
   tasks:
-    - name: Check epel repository config file
-      ansible.builtin.stat:
-        path: "{{ epel_repo_file_path }}"
-      register: check_epel_repo_file_path_result
+    - name: Load role internal variables
+      ansible.builtin.include_vars: ../../vars/main.yml
 
-    - name: Check epel testing repository config file
+    - name: Check epel repositories config files
       ansible.builtin.stat:
-        path: "{{ epel_testing_config_file }}"
-      register: check_epel_testing_config_file_result
+        path: "{{ epel_repository_item.path }}"
+      register: check_epel_repo_path_result
+      loop: "{{ epel_repositories }}"
+      loop_control:
+        loop_var: epel_repository_item
+        label: "{{ epel_repository_item.section }}"
 
-    - name: Check epel config files exist
+    - name: Check epel config files does not exist
       ansible.builtin.assert:
-        that:
-          - not check_epel_repo_file_path_result.stat.exists
-          - not check_epel_testing_config_file_result.stat.exists
+        that: >-
+          check_epel_repo_path_result.results
+          | map(attribute="stat")
+          | selectattr("exists", "equalto", true)
+          | list
+          | length == 0
 
     - name: Check that all epel packages were removed
       ansible.builtin.shell: >-

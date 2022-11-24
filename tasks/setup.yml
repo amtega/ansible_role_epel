@@ -1,0 +1,20 @@
+---
+
+- name: Install epel
+  ansible.builtin.include_tasks: install.yml
+  when:
+    - ansible_facts.distribution | lower != "fedora"
+    - _epel_setup_required | bool
+  tags:
+    - role::epel
+    - role::epel::install
+
+- name: Configure epel
+  ansible.builtin.include_tasks: configure.yml
+  when:
+    - ansible_facts.distribution | lower != "fedora"
+    - epel_state in ["present", "force"]
+    - _epel_setup_required | bool
+  tags:
+    - role::epel
+    - role::epel::configure

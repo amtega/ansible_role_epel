@@ -1,5 +1,15 @@
 ---
 
 - name: Prepare
-  hosts: molecule_hosts
+  hosts: molecule_hosts_centos_6
   gather_facts: no
+  roles:
+    - amtega.python
+  tasks:
+    # Ansible yum module does not work in older systems, so we use a direct
+    # command
+    - name: Setup required packages
+      ansible.builtin.command: yum install -y initscripts
+      changed_when: yes
+      args:
+        warn: no

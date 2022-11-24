@@ -1,29 +1,63 @@
 ---
-# Role variables
 
 # Repository config files
 
-epel_repo_file_path: /etc/yum.repos.d/epel.repo
-epel_testing_config_file: /etc/yum.repos.d/epel-testing.repo
-epel_modular_config_file: /etc/yum.repos.d/epel-modular.repo
-epel_testing_modular_config_file: /etc/yum.repos.d/epel-testing-modular.repo
+epel_repo_path: /etc/yum.repos.d/epel.repo
+epel_testing_repo_path: /etc/yum.repos.d/epel-testing.repo
+epel_modular_repo_path: /etc/yum.repos.d/epel-modular.repo
+epel_testing_modular_repo_path: /etc/yum.repos.d/epel-testing-modular.repo
 
-# Variable to indicate if epel configuration is required
+# Repositories
 
-epel_configuration_required: >-
-  {{ ansible_local.epel is undefined
-     or epel_state == "force"
-     or epel_state
-      != ansible_local.epel.state
-     or epel_enabled
-      != ansible_local.epel.enabled
-     or epel_debuginfo_enabled
-      != ansible_local.epel.debuginfo_enabled
-     or epel_source_enabled
-      != ansible_local.epel.source_enabled
-     or epel_testing_enabled
-      != ansible_local.epel.testing_enabled
-     or epel_testing_debuginfo_enabled
-      != ansible_local.epel.testing_debuginfo_enabled
-     or epel_testing_source_enabled
-      != ansible_local.epel.testing_source_enabled }}
+epel_repositories: >-
+  {{ (ansible_facts.distribution_major_version is version("7", ">")
+     | ternary(epel_base_repositories + epel_modular_repositories,
+                epel_base_repositories)) }}
+
+epel_base_repositories:
+  - section: epel
+    path: "{{ epel_repo_path }}"
+
+  - section: epel-debuginfo
+    path: "{{ epel_repo_path }}"
+
+  - section: epel-source
+    path: "{{ epel_repo_path }}"
+
+  - section: epel-testing
+    path: "{{ epel_testing_repo_path }}"
+
+  - section: epel-testing-debuginfo
+    path: "{{ epel_testing_repo_path }}"
+
+  - section: epel-testing-source
+    path: "{{ epel_testing_repo_path }}"
+
+epel_modular_repositories:
+  - section: epel-modular
+    path: "{{ epel_modular_repo_path }}"
+
+  - section: epel-modular-debuginfo
+    path: "{{ epel_modular_repo_path }}"
+
+  - section: epel-modular-source
+    path: "{{ epel_modular_repo_path }}"
+
+  - section: epel-testing-modular
+    path: "{{ epel_testing_modular_repo_path }}"
+
+  - section: epel-testing-modular-debuginfo
+    path: "{{ epel_testing_modular_repo_path }}"
+
+  - section: epel-testing-modular-source
+    path: "{{ epel_testing_modular_repo_path }}"
+
+ # Repository local mirror
+
+epel_repository_local_mirror_url: >-
+  {{ lookup("ansible.builtin.vars",
+            "epel_local_mirror%s"
+            | format(epel_repository_item.section
+                     | regex_replace("-", "_")
+                     | regex_replace("^epel(.*)", "\1"))
+            , default="") }}

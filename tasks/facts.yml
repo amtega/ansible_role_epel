@@ -1,0 +1,18 @@
+---
+
+- name: Setup local facts directory
+  ansible.builtin.file:
+    path: /etc/ansible/facts.d
+    state: directory
+    mode: 0755
+
+- name: Setup local fact
+  ansible.builtin.template:
+    src: epel.fact.j2
+    dest: /etc/ansible/facts.d/epel.fact
+    mode: 0640
+  register: epel_setup_local_fact_result
+
+- name: Refresh local facts # noqa no-handler
+  ansible.builtin.setup:
+  when: epel_setup_local_fact_result is changed

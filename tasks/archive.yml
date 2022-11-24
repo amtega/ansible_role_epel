@@ -1,5 +1,7 @@
 ---
+
 - name: Setup epel archive
+  when: epel_state in ["present", "force"]
   block:
     - name: Setup epel archive repository
       ansible.builtin.template:
@@ -18,5 +20,16 @@
         group: root
         mode: 0644
         backup: no
-  tags:
-    - role::epel::install
+
+- name: Remove epel archive
+  when: epel_state == "absent"
+  block:
+    - name: Setup epel archive repository
+      ansible.builtin.file:
+        path: /etc/yum.repos.d/epel.repo
+        state: absent
+
+    - name: Setup epel-testing archive repository
+      ansible.builtin.file:
+        path: /etc/yum.repos.d/epel-testing.repo
+        state: absent

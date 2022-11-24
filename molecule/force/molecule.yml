@@ -45,13 +45,23 @@ provisioner:
       molecule_hosts:
         vars:
           epel_state: force
-          epel_enabled: 1
-          epel_debuginfo_enabled: 1
-          epel_source_enabled: 1
-          epel_testing_enabled: 1
-          epel_testing_debuginfo_enabled: 1
-          epel_testing_source_enabled: 1
-          epel_repo_file_path: /etc/yum.repos.d/epel.repo
-          epel_testing_config_file: /etc/yum.repos.d/epel-testing.repo
+          epel_enabled: yes
+          epel_debuginfo_enabled: yes
+          epel_source_enabled: yes
+          epel_testing_enabled: yes
+          epel_testing_debuginfo_enabled: yes
+          epel_testing_source_enabled: yes
+          epel_modular_enabled: yes
+          epel_modular_debuginfo_enabled: yes
+          epel_modular_source_enabled: yes
+          epel_testing_modular_enabled: yes
+          epel_testing_modular_debuginfo_enabled: yes
+          epel_testing_modular_source_enabled: yes
+          epel_repo_path: /etc/yum.repos.d/epel.repo
+          epel_testing_repo_path: /etc/yum.repos.d/epel-testing.repo
+      molecule_hosts_centos_6:
+        vars:
+          python_build_install_dir: /opt/python
+          ansible_python_interpreter: /opt/python/bin/python3
 verifier:
   name: ansible

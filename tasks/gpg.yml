@@ -1,0 +1,31 @@
+---
+
+- name: Setup gpg check
+  community.general.ini_file:
+    path: "{{ epel_repository_item.path }}"
+    section: "{{ epel_repository_item.section }}"
+    option: gpgcheck
+    value: "{{ (epel_disable_gpg_check) | ternary(0, 1) }}"
+    no_extra_spaces: yes
+    mode: 0644
+  loop: "{{ epel_repositories }}"
+  loop_control:
+    loop_var: epel_repository_item
+    label: "{{ epel_repository_item.section }}"
+
+- name: Setup gpg key
+  community.general.ini_file:
+    path: "{{ mirror.path }}"
+    section: "{{ mirror.section }}"
+    option: gpgkey
+    state: "{{ (epel_disable_gpg_check) | ternary('absent', 'present') }}"
+    value: >-
+      {{ (epel_disable_gpg_check)
+        | ternary(omit, "file://%s" | format(epel_gpg_key_file_path)) }}
+    no_extra_spaces: yes
+    mode: 0644
+  when: epel_gpg_key_file_path | default("") | length > 0
+  loop: "{{ epel_repositories }}"
+  loop_control:
+    loop_var: epel_repository_item
+    label: "{{ epel_repository_item.section }}"

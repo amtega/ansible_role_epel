@@ -1,3 +1,0 @@
----
-- name: Force epel archive setup
-  ansible.builtin.include_tasks: epel_archive_present.yml
