@@ -5,7 +5,6 @@
     - name: Setup proxy client
       ansible.builtin.include_role:
         name: amtega.proxy_client
-      when: epel_state in ["present", "force"]
       vars:
         proxy_client_permanent: no
 
@@ -32,6 +31,7 @@
     - name: Setup epel archive
       ansible.builtin.include_tasks: archive.yml
       when: ansible_facts.distribution_major_version is version("7", "<")
+  environment: "{{ proxy_client_environment | default({}) }}"
   tags:
     - role::epel
     - role::epel::install
