@@ -19,6 +19,7 @@
 
 {% if epel_management | bool
       and (ansible_local.epel is undefined
+           or (ansible_local.epel is defined and epel_state == "absent")
            or epel_state == "force"
            or epel_state != ansible_local.epel.state
            or config.changed) %}

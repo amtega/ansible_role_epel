@@ -4,12 +4,15 @@
   block:
     - name: Setup epel repositories enabled status
       ansible.builtin.include_tasks: enabled.yml
+      when: epel_state in ["present", "force"]
 
     - name: Setup epel repositories gpg
       ansible.builtin.include_tasks: gpg.yml
+      when: epel_state in ["present", "force"]
 
     - name: Setup epel repositories mirrors
       ansible.builtin.include_tasks: baseurl.yml
+      when: epel_state in ["present", "force"]
       vars:
         epel_repository_base_url: "{{ epel_repository_local_mirror_url }}"
 
