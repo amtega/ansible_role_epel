@@ -25,13 +25,12 @@
     # Ansible yum module does not work in older systems, so we use a direct
     # command
     - name: Setup package from epel usin yum command
+      # noqa command-instead-of-module
       ansible.builtin.command: >-
         yum install -y atop
         --disablerepo=base
         --disablerepo=extras
         --disablerepo=updates
-      args:
-        warn: no
       register: yum_result
       changed_when: yum_result.stdout is search("Installed:")
       when:
