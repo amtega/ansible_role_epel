@@ -25,11 +25,10 @@
           | length == 0
 
     - name: Check that all epel packages were removed
+      # noqa command-instead-of-module
       ansible.builtin.shell: >-
         set -o pipefail ;
         yum list installed epel* | grep epel
-      args:
-        warn: no
       register: check_packages
       failed_when: check_packages.stdout | length > 0
       changed_when: no

@@ -9,7 +9,6 @@
     # Ansible yum module does not work in older systems, so we use a direct
     # command
     - name: Setup required packages
+      # noqa command-instead-of-module
       ansible.builtin.command: yum install -y initscripts
       changed_when: yes
-      args:
-        warn: no
